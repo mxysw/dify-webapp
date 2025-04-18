@@ -3,11 +3,11 @@ export const APP_ID = `${process.env.NEXT_PUBLIC_APP_ID}`
 export const API_KEY = `${process.env.NEXT_PUBLIC_APP_KEY}`
 export const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
 export const APP_INFO: AppInfo = {
-  title: 'Chat APP',
-  description: '',
-  copyright: '',
+  title: '金沙公安AI服务助手',
+  description: '一个基于AI服务助手',
+  copyright: '2025 聊天机器人',
   privacy_policy: '',
-  default_language: 'en',
+  default_language: 'zh-Hans',
 }
 
 export const isShowPrompt = false

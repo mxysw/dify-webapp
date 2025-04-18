@@ -48,6 +48,12 @@ const Main: FC<IMainProps> = () => {
     detail: Resolution.low,
     transfer_methods: [TransferMethod.local_file],
   })
+  const [chatBackgroundImage, setChatBackgroundImage] = useState<string>('/backgrounds/my-desktop-background.jpg')
+  const [mobileChatBackgroundImage, setMobileChatBackgroundImage] = useState<string>('/backgrounds/my-mobile-background.jpg')
+
+  // 聊天头像配置
+  const [userAvatar, setUserAvatar] = useState<string>('/avatars/user-avatar.png')
+  const [assistantAvatar, setAssistantAvatar] = useState<string>('/avatars/assistant-avatar.png')
 
   useEffect(() => {
     if (APP_INFO?.title)
@@ -678,7 +684,7 @@ const Main: FC<IMainProps> = () => {
 
           {
             hasSetInputs && (
-              <div className='relative grow h-[200px] pc:w-[794px] max-w-full mobile:w-full pb-[66px] mx-auto mb-3.5 overflow-hidden'>
+              <div className='relative grow h-[200px] pc:w-full max-w-full mobile:w-full pb-[66px] mx-auto mb-3.5 overflow-hidden bg-gray-50/50 backdrop-blur-sm rounded-lg'>
                 <div className='h-full overflow-y-auto' ref={chatListDomRef}>
                   <Chat
                     chatList={chatList}
@@ -687,6 +693,10 @@ const Main: FC<IMainProps> = () => {
                     isResponding={isResponding}
                     checkCanSend={checkCanSend}
                     visionConfig={visionConfig}
+                    backgroundImage={chatBackgroundImage}
+                    mobileBackgroundImage={mobileChatBackgroundImage}
+                    userAvatar={userAvatar}
+                    assistantAvatar={assistantAvatar}
                   />
                 </div>
               </div>)

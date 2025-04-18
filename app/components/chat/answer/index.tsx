@@ -14,6 +14,7 @@ import Tooltip from '@/app/components/base/tooltip'
 import WorkflowProcess from '@/app/components/workflow/workflow-process'
 import { Markdown } from '@/app/components/base/markdown'
 import type { Emoji } from '@/types/tools'
+import Avatar from '../avatar'
 
 const OperationBtn = ({ innerContent, onClick, className }: { innerContent: React.ReactNode; onClick?: () => void; className?: string }) => (
   <div
@@ -60,6 +61,8 @@ type IAnswerProps = {
   onFeedback?: FeedbackFunc
   isResponding?: boolean
   allToolIcons?: Record<string, string | Emoji>
+  onImagesLoaded?: () => void
+  assistantAvatar?: string
 }
 
 // The component needs to maintain its own state to control whether to display input component
@@ -69,6 +72,8 @@ const Answer: FC<IAnswerProps> = ({
   onFeedback,
   isResponding,
   allToolIcons,
+  onImagesLoaded,
+  assistantAvatar,
 }) => {
   const { id, content, feedback, agent_thoughts, workflowProcess } = item
   const isAgentMode = !!agent_thoughts && agent_thoughts.length > 0
@@ -158,7 +163,10 @@ const Answer: FC<IAnswerProps> = ({
           )}
 
           {getImgs(item.message_files).length > 0 && (
-            <ImageGallery srcs={getImgs(item.message_files).map(item => item.url)} />
+            <ImageGallery
+              srcs={getImgs(item.message_files).map(item => item.url)}
+              onImagesLoaded={onImagesLoaded}
+            />
           )}
         </div>
       ))}
@@ -167,17 +175,23 @@ const Answer: FC<IAnswerProps> = ({
 
   return (
     <div key={id}>
-      <div className='flex items-start'>
-        <div className={`${s.answerIcon} w-10 h-10 shrink-0`}>
-          {isResponding
-            && <div className={s.typeingIcon}>
-              <LoadingAnim type='avatar' />
-            </div>
-          }
-        </div>
-        <div className={`${s.answerWrap}`}>
-          <div className={`${s.answer} relative text-sm text-gray-900`}>
-            <div className={`ml-2 py-3 px-4 bg-gray-100 rounded-tr-2xl rounded-b-2xl ${workflowProcess && 'min-w-[480px]'}`}>
+      <div className='flex items-start my-4'>
+        <Avatar
+          type="assistant"
+          avatar={assistantAvatar}
+          isTyping={isResponding}
+        />
+        <div className="max-w-[85%] md:max-w-[75%]">
+          <div className="relative text-sm text-gray-900">
+            <div
+              style={{
+                background: '#fff', // 微信对方气泡白色
+                border: '1px solid #e5e5e5', // 浅灰色边框
+                boxShadow: '0 1px 1.5px rgba(0,0,0,0.04)', // 轻微阴影
+                borderRadius: '18px', // 更圆润的边角
+              }}
+              className="ml-2 py-3 px-4 break-words"
+            >
               {workflowProcess && (
                 <WorkflowProcess data={workflowProcess} hideInfo />
               )}

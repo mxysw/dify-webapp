@@ -1,12 +1,13 @@
 'use client'
 import type { FC } from 'react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import cn from 'classnames'
 import s from './style.module.css'
 import ImagePreview from '@/app/components/base/image-uploader/image-preview'
 
 type Props = {
   srcs: string[]
+  onImagesLoaded?: () => void
 }
 
 const getWidthStyle = (imgNum: number) => {
@@ -29,8 +30,21 @@ const getWidthStyle = (imgNum: number) => {
 
 const ImageGallery: FC<Props> = ({
   srcs,
+  onImagesLoaded,
 }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState('')
+  const [loadedImages, setLoadedImages] = useState(0)
+
+  // 当所有图片加载完成时触发回调
+  useEffect(() => {
+    if (loadedImages === srcs.length && loadedImages > 0 && onImagesLoaded) {
+      onImagesLoaded()
+    }
+  }, [loadedImages, srcs.length, onImagesLoaded])
+
+  const handleImageLoad = () => {
+    setLoadedImages(prev => prev + 1)
+  }
 
   const imgNum = srcs.length
   const imgStyle = getWidthStyle(imgNum)
@@ -45,6 +59,7 @@ const ImageGallery: FC<Props> = ({
           src={src}
           alt=''
           onClick={() => setImagePreviewUrl(src)}
+          onLoad={handleImageLoad}
         />
       ))}
       {

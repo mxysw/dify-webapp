@@ -6,36 +6,39 @@ import s from '../style.module.css'
 
 import { Markdown } from '@/app/components/base/markdown'
 import ImageGallery from '@/app/components/base/image-gallery'
+import Avatar from '../avatar'
 
 type IQuestionProps = Pick<IChatItem, 'id' | 'content' | 'useCurrentUserAvatar'> & {
   imgSrcs?: string[]
+  onImagesLoaded?: () => void
+  userAvatar?: string
 }
 
-const Question: FC<IQuestionProps> = ({ id, content, useCurrentUserAvatar, imgSrcs }) => {
-  const userName = ''
+const Question: FC<IQuestionProps> = ({ id, content, useCurrentUserAvatar, imgSrcs, onImagesLoaded, userAvatar }) => {
   return (
-    <div className='flex items-start justify-end' key={id}>
-      <div>
-        <div className={`${s.question} relative text-sm text-gray-900`}>
+    <div className='flex items-start justify-end my-4' key={id}>
+      <div className="max-w-[85%] md:max-w-[75%]">
+        <div className="relative text-sm text-gray-900">
           <div
-            className={'mr-2 py-3 px-4 bg-blue-500 rounded-tl-2xl rounded-b-2xl'}
+            style={{
+              background: 'rgba(149, 236, 105, 0.9)', // 微信绿色，90%透明度
+              boxShadow: '0 1px 1.5px rgba(0,0,0,0.04)', // 轻微阴影
+              borderRadius: '4px', // 更微信风格的方形边角
+            }}
+            className='mr-2 py-3 px-4 break-words'
           >
             {imgSrcs && imgSrcs.length > 0 && (
-              <ImageGallery srcs={imgSrcs} />
+              <ImageGallery srcs={imgSrcs} onImagesLoaded={onImagesLoaded} />
             )}
             <Markdown content={content} />
           </div>
         </div>
       </div>
-      {useCurrentUserAvatar
-        ? (
-          <div className='w-10 h-10 shrink-0 leading-10 text-center mr-2 rounded-full bg-primary-600 text-white'>
-            {userName?.[0].toLocaleUpperCase()}
-          </div>
-        )
-        : (
-          <div className={`${s.questionIcon} w-10 h-10 shrink-0 `}></div>
-        )}
+      <Avatar
+        type="user"
+        avatar={userAvatar}
+        borderRadius="rounded"
+      />
     </div>
   )
 }
